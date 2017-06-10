@@ -1,0 +1,40 @@
+clc
+aq=[14.099	0.01991	-2.089E-05	448.000	0.5501	-5.597E-04]
+
+DATACONDUC(1)=14.1;         % K1
+DATACONDUC(2)=0.02;      % K2
+DATACONDUC(3)=-2.10E-05;           % K3
+DATACONDUC(4)=448.;         % CP1
+DATACONDUC(5)=0.55;       % CP2
+DATACONDUC(6)=-5.60E-04;           % CP3
+DATACONDUC(7)=6288.25;        % Ro
+DATACONDUC(8)=23.;         % T Initial
+DATACONDUC(9)=1000/2;         % NT
+DATACONDUC(10)=11;          % NX
+DATACONDUC(11)=21;          % Ny
+DATACONDUC(12)=2*2;        % DT
+DATACONDUC(13)=120*10^3;    %q
+DATACONDUC(14)=.3;           % th
+DATACONDUC(15)=.1;           % Lx
+DATACONDUC(16)=.2;           % Ly
+DATACONDUC(17)=6;           % Error
+DATACONDUC(18)=DATACONDUC(13)*(.08)/DATACONDUC(1);
+NT=DATACONDUC(9);
+NX=DATACONDUC(10);
+NY=DATACONDUC(11);
+TIME=DATACONDUC(12)*(NT-1.);
+TIMEPLUS=TIME*(DATACONDUC(1)/(DATACONDUC(7)*DATACONDUC(4)))/(DATACONDUC(15)^2);
+T=DIRECTSOLUTION(DATACONDUC);
+zigma=0;
+TE=REFRENCESOLUTION(T,DATACONDUC,zigma);
+qlk=DATACONDUC(18);
+% ======================================================================
+DATACONDUC(1)=aq(1);         % K1
+DATACONDUC(2)=aq(2);      % K2
+DATACONDUC(3)=aq(3);           % K3
+DATACONDUC(4)=aq(4);         % CP1
+DATACONDUC(5)=aq(5);       % CP2
+DATACONDUC(6)=aq(6);           % CP3
+T=DIRECTSOLUTION(DATACONDUC);
+B1=ARMS(T,TE,DATACONDUC)/qlk^2;
+FITTNES=1/(.001+sqrt(B1))
